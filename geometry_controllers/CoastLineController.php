@@ -7,9 +7,11 @@ use Geometry\LineSegment as LineSegment;
 class CoastLineController {
     private $points = array();
     private $name = "";
+    private $rawCordinates = "";
 
     public function __construct($name, $coordinateArray) {
         $this->points = array();
+        $this->rawCordinates = $coordinateArray;
         $this->name = $name;
         $totalPoints = count($coordinateArray); 
 		for($i = 0; $i < $totalPoints; $i++) {
@@ -18,6 +20,9 @@ class CoastLineController {
 		}
     }
 
+    public function getRawCoordinates() {
+        return $this->rawCordinates;
+    }
     public function nearestPointIndexInArray($lat, $long) {
         $searchPoint = new Point($long, $lat);
         $totalPoints = count($this->points);
