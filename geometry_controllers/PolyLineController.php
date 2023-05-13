@@ -30,7 +30,6 @@ class PolyLineController {
         }
     }
     private function setSecondNearestPolygon($x, $y) {
-        echo "In the second nearest poly\n";
         $this->secondNearestPointInfo = array();
         $this->secondNearestPoly = null;
         foreach($this->coastalLines as $coasts) {
@@ -63,7 +62,6 @@ class PolyLineController {
             $pc->addPolygon($this->secondNearestPoly->getName(), $this->secondNearestPoly->getRawCoordinates());
 
             if( !$pc->isPointInAllPolygons($x, $y) ) {
-                echo "Point not in all polygon \n";
                 break;
             }
         }
@@ -74,10 +72,17 @@ class PolyLineController {
             return $nearestPoint;
         }
 
+        $secondNearestPoint = $this->secondNearestPoly->getName();
+
         $deno = $this->nearestPointInfo['distance'] + $this->secondNearestPointInfo['distance'];
         $num = $this->nearestPointInfo['distance'] < $this->secondNearestPointInfo['distance'] ? $this->nearestPointInfo['distance'] : $this->secondNearestPointInfo['distance'];
 
         $percent = round(($num * 100) / $deno); 
+
+        if((int)$secondNearestPoint < (int)$nearestPoint) {
+            $percent = 100 - $percent;
+            $nearestPoint = $secondNearestPoint;
+        }
 
         return ($nearestPoint . "." . $percent);
     }
